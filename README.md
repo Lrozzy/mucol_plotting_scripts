@@ -6,9 +6,9 @@ TBD
 
 ## For plotting with python notebooks
 
-**For analysis in a python notebook only with uproot**
-- I have homebrew installed python3 and anaconda
-- I used anaconda's pip, to ```pip install uproot```
+**For analysis in a python notebook with uproot/awkward arrays only**
+- I manage packages with homebrew, and used it to install anaconda 
+- I install packages for anaconda like ```conda install -c conda-forge vector```
 - Start a notebook with 
 ```
 jupyter notebook
