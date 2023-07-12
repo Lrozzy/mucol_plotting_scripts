@@ -83,25 +83,28 @@ h_track_Rprod = TH1D('track_Rprod',
                      'track_Rprod', len(arrBins_R)-1, arrBins_R)  # mm
 
 
-h_LLPtrack_d0 = TH1D('LLPtrack_d0', 'LLPtrack_d0', 100, -5., 5.)
-h_LLPtrack_z0 = TH1D('LLPtrack_z0', 'LLPtrack_z0', 100, -20., 20.)
-h_LLPtrack_pT = TH1D('LLPtrack_pT', 'LLPtrack_pT',
-                     len(arrBins_pT)-1, arrBins_pT)
-h_LLPtrack_phi = TH1D('LLPtrack_phi', 'LLPtrack_phi',
-                      20, -TMath.Pi(), TMath.Pi())
-h_LLPtrack_theta = TH1D('LLPtrack_theta', 'LLPtrack_theta',
-                        len(arrBins_theta)-1, arrBins_theta)
-h_LLPtrack_nholes = TH1D('LLPtrack_nholes', 'LLPtrack_nholes', 20, 0., 20.)
-h_LLPtrack_nhits = TH1D('LLPtrack_nhits', 'LLPtrack_nhits', 20, 0., 20.)
-h_LLPtrack_chi2ndf = TH1D(
-    'LLPtrack_chi2ndf', 'LLPtrack_chi2ndf', 100, 0., 100.)
-h_LLPtrack_Rprod = TH1D('LLPtrack_Rprod',
-                        'LLPtrack_Rprod', len(arrBins_R)-1, arrBins_R)  # mm
+#h_LLPtrack_d0 = TH1D('LLPtrack_d0', 'LLPtrack_d0', 100, -5., 5.)
+#h_LLPtrack_z0 = TH1D('LLPtrack_z0', 'LLPtrack_z0', 100, -20., 20.)
+#h_LLPtrack_pT = TH1D('LLPtrack_pT', 'LLPtrack_pT',
+#                     len(arrBins_pT)-1, arrBins_pT)
+#h_LLPtrack_phi = TH1D('LLPtrack_phi', 'LLPtrack_phi',
+#                      20, -TMath.Pi(), TMath.Pi())
+#h_LLPtrack_theta = TH1D('LLPtrack_theta', 'LLPtrack_theta',
+#                        len(arrBins_theta)-1, arrBins_theta)
+#h_LLPtrack_nholes = TH1D('LLPtrack_nholes', 'LLPtrack_nholes', 20, 0., 20.)
+#h_LLPtrack_nhits = TH1D('LLPtrack_nhits', 'LLPtrack_nhits', 20, 0., 20.)
+#h_LLPtrack_chi2ndf = TH1D(
+#    'LLPtrack_chi2ndf', 'LLPtrack_chi2ndf', 100, 0., 100.)
+#h_LLPtrack_Rprod = TH1D('LLPtrack_Rprod',
+#                        'LLPtrack_Rprod', len(arrBins_R)-1, arrBins_R)  # mm
 
-histos_list = [h_truth_Rprod, h_truth_pT, h_truth_theta, h_truth_phi, h_track_chi2ndf, h_LLPtrack_chi2ndf,
+histos_list = [h_truth_Rprod, h_truth_pT, h_truth_theta, h_truth_phi, h_track_chi2ndf, 
                h_track_d0, h_track_z0, h_track_pT, h_track_phi, h_track_theta, h_track_nholes, h_track_nhits,
-               h_LLPtrack_d0, h_LLPtrack_z0, h_LLPtrack_pT, h_LLPtrack_phi, h_LLPtrack_theta, h_LLPtrack_nholes,
-               h_LLPtrack_nhits, h_track_Rprod, h_LLPtrack_Rprod]
+               h_track_Rprod]
+#histos_list = [h_truth_Rprod, h_truth_pT, h_truth_theta, h_truth_phi, h_track_chi2ndf, h_LLPtrack_chi2ndf,
+#               h_track_d0, h_track_z0, h_track_pT, h_track_phi, h_track_theta, h_track_nholes, h_track_nhits,
+#               h_LLPtrack_d0, h_LLPtrack_z0, h_LLPtrack_pT, h_LLPtrack_phi, h_LLPtrack_theta, h_LLPtrack_nholes,
+#               h_LLPtrack_nhits, h_track_Rprod, h_LLPtrack_Rprod]
 
 for histo in histos_list:
     histo.SetDirectory(0)
@@ -145,7 +148,7 @@ tree.Branch("ndf", ndf, 'var/I')
 tree.Branch("nhits", nhits, 'var/I')
 tree.Branch("nholes", nholes, 'var/I')
 tree.Branch("pdgID", pdgID, 'var/I')
-tree.Branch("isLLP", isLLP, 'var/I')
+#tree.Branch("isLLP", isLLP, 'var/I')
 
 #########################
 # create a reader and open an LCIO file
@@ -158,11 +161,11 @@ for ievent, event in enumerate(reader):
     if ievent % 100 == 0:
         print("Processing event " + str(ievent))
 
-    relationCollectionLLP = event.getCollection('MCParticle_Tracks_LLP')
-    relationLLP = UTIL.LCRelationNavigator(relationCollectionLLP)
+    #relationCollectionLLP = event.getCollection('MCParticle_Tracks_LLP')
+    #relationLLP = UTIL.LCRelationNavigator(relationCollectionLLP)
 
-    relationCollection = event.getCollection('MCParticle_Tracks')
-    relation = UTIL.LCRelationNavigator(relationCollection)
+    #relationCollection = event.getCollection('MCParticle_Tracks')
+    #relation = UTIL.LCRelationNavigator(relationCollection)
 
     hit_relations = []
     IBTrackerHitsRelations = event.getCollection('IBTrackerHitsRelations')
@@ -178,54 +181,54 @@ for ievent, event in enumerate(reader):
     VETrackerHitsRelations = event.getCollection('VETrackerHitsRelations')
     hit_relations.append(VETrackerHitsRelations)
 
-    # getting tracks and relative hits
-    tracks = event.getCollection('Tracks_LLP')
+    ## getting tracks and relative hits
+    #tracks = event.getCollection('Tracks_LLP')
 
-    for itrack, track in enumerate(tracks):
-        pt[0] = 0.3 * Bfield / fabs(track.getOmega() * 1000.)
-        phi[0] = track.getPhi()
-        theta[0] = TMath.Pi()/2-atan(track.getTanLambda())
-        d0[0] = track.getD0()
-        z0[0] = track.getZ0()
-        sigma_d0[0] = track.getCovMatrix()[0]
-        sigma_z0[0] = track.getCovMatrix()[9]
-        omega[0] = track.getOmega()
-        chi2[0] = track.getChi2()
-        ndf[0] = track.getNdf()
+    #for itrack, track in enumerate(tracks):
+    #    pt[0] = 0.3 * Bfield / fabs(track.getOmega() * 1000.)
+    #    phi[0] = track.getPhi()
+    #    theta[0] = TMath.Pi()/2-atan(track.getTanLambda())
+    #    d0[0] = track.getD0()
+    #    z0[0] = track.getZ0()
+    #    sigma_d0[0] = track.getCovMatrix()[0]
+    #    sigma_z0[0] = track.getCovMatrix()[9]
+    #    omega[0] = track.getOmega()
+    #    chi2[0] = track.getChi2()
+    #    ndf[0] = track.getNdf()
 
-        hits = track.getTrackerHits()
-        numhits = len(hits)
-        holes = int(track.getdEdxError())  # BADHACK
-        nhits[0] = numhits
-        nholes[0] = holes
-        isLLP[0] = 1
+    #    hits = track.getTrackerHits()
+    #    numhits = len(hits)
+    #    holes = int(track.getdEdxError())  # BADHACK
+    #    nhits[0] = numhits
+    #    nholes[0] = holes
+    #    isLLP[0] = 1
 
-        try:
-            mcp = relationLLP.getRelatedFromObjects(track)[0]
-            pdgID[0] = abs(mcp.getPDG())
-            vx = mcp.getVertex()
-            z_truth[0] = vx[2]
-            dp3 = mcp.getMomentum()
-            tlv = TLorentzVector()
-            tlv.SetPxPyPzE(dp3[0], dp3[1], dp3[2], mcp.getEnergy())
-            pt_truth[0] = tlv.Perp()
-            rprod = sqrt(vx[0]*vx[0]+vx[1]*vx[1])
+    #    try:
+    #        mcp = relationLLP.getRelatedFromObjects(track)[0]
+    #        pdgID[0] = abs(mcp.getPDG())
+    #        vx = mcp.getVertex()
+    #        z_truth[0] = vx[2]
+    #        dp3 = mcp.getMomentum()
+    #        tlv = TLorentzVector()
+    #        tlv.SetPxPyPzE(dp3[0], dp3[1], dp3[2], mcp.getEnergy())
+    #        pt_truth[0] = tlv.Perp()
+    #        rprod = sqrt(vx[0]*vx[0]+vx[1]*vx[1])
 
-        except:
-            pt_truth[0] = -1.
-            z_truth[0] = -99999.
-            pdgID[0] = 0
+    #    except:
+    #        pt_truth[0] = -1.
+    #        z_truth[0] = -99999.
+    #        pdgID[0] = 0
 
-        h_LLPtrack_d0.Fill(d0[0])
-        h_LLPtrack_z0.Fill(z0[0])
-        h_LLPtrack_nholes.Fill(holes)
-        h_LLPtrack_nhits.Fill(numhits)
-        h_LLPtrack_chi2ndf.Fill(track.getChi2()/track.getNdf())
+    #    h_LLPtrack_d0.Fill(d0[0])
+    #    h_LLPtrack_z0.Fill(z0[0])
+    #    h_LLPtrack_nholes.Fill(holes)
+    #    h_LLPtrack_nhits.Fill(numhits)
+    #    h_LLPtrack_chi2ndf.Fill(track.getChi2()/track.getNdf())
 
-        tree.Fill()
+    #    tree.Fill()
 
     # filling standard tracks
-    tracks = event.getCollection('Tracks')
+    tracks = event.getCollection('AllTracks')
 
     for itrack, track in enumerate(tracks):
         pt[0] = 0.3 * Bfield / fabs(track.getOmega() * 1000.)
@@ -244,7 +247,7 @@ for ievent, event in enumerate(reader):
         holes = int(track.getdEdxError())  # BADHACK
         nhits[0] = numhits
         nholes[0] = holes
-        isLLP[0] = 0
+        #isLLP[0] = 0
 
         try:
             mcp = relation.getRelatedFromObjects(track)[0]
@@ -286,12 +289,13 @@ for ievent, event in enumerate(reader):
                 tlv = TLorentzVector()
                 tlv.SetPxPyPzE(dp3[0], dp3[1], dp3[2], mcp.getEnergy())
 
-                n_simhits = 0
-                for collection in hit_relations:
-                    hit_rel_navigator = UTIL.LCRelationNavigator(
-                        relationCollection)
-                    sim_hits = hit_rel_navigator.getRelatedToObjects(mcp)
-                    n_simhits = n_simhits+len(sim_hits)
+                n_simhits = 5 
+                #for collection in hit_relations:
+                #    #hit_rel_navigator = UTIL.LCRelationNavigator(
+                #    #    relationCollection)
+                #    #sim_hits = hit_rel_navigator.getRelatedToObjects(mcp)
+                #    #n_simhits = n_simhits+len(sim_hits)
+                #    n_simhits = 10 
 
                 if n_simhits > 5 and tlv.Perp() > 1:
 
@@ -300,21 +304,21 @@ for ievent, event in enumerate(reader):
                     h_truth_phi.Fill(tlv.Phi())
                     h_truth_theta.Fill(tlv.Theta())
 
-                    tracks = relation.getRelatedToObjects(mcp)
-                    for track in tracks:
-                        if track_selection(track):
-                            h_track_Rprod.Fill(rprod)
-                            h_track_pT.Fill(tlv.Perp())
-                            h_track_phi.Fill(tlv.Phi())
-                            h_track_theta.Fill(tlv.Theta())
+                    #tracks = relation.getRelatedToObjects(mcp)
+                    #for track in tracks:
+                    #    if track_selection(track):
+                    #        h_track_Rprod.Fill(rprod)
+                    #        h_track_pT.Fill(tlv.Perp())
+                    #        h_track_phi.Fill(tlv.Phi())
+                    #        h_track_theta.Fill(tlv.Theta())
 
-                    LLPtracks = relationLLP.getRelatedToObjects(mcp)
-                    for track in LLPtracks:
-                        if track_selection(track):
-                            h_LLPtrack_Rprod.Fill(rprod)
-                            h_LLPtrack_pT.Fill(tlv.Perp())
-                            h_LLPtrack_phi.Fill(tlv.Phi())
-                            h_LLPtrack_theta.Fill(tlv.Theta())
+                    #LLPtracks = relationLLP.getRelatedToObjects(mcp)
+                    #for track in LLPtracks:
+                    #    if track_selection(track):
+                    #        h_LLPtrack_Rprod.Fill(rprod)
+                    #        h_LLPtrack_pT.Fill(tlv.Perp())
+                    #        h_LLPtrack_phi.Fill(tlv.Phi())
+                    #        h_LLPtrack_theta.Fill(tlv.Theta())
 
 reader.close()
 
